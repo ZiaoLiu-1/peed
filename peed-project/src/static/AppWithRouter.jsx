@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { BrowserRouter as Router, Routes, Route, useNavigate, useLocation } from 'react-router-dom'
-import { Globe, Sparkles, Heart, Award, Users, Target, TrendingUp, Shield, Wallet, User } from 'lucide-react'
+import { Globe, Sparkles, Heart, Award, Users, Target, TrendingUp, Shield, Wallet, User, Info } from 'lucide-react'
 import TigangButton from './TigangButton'
 import ProfilePage from './ProfilePage'
 
@@ -469,6 +469,139 @@ function HomePage() {
           </p>
           <div className="flex justify-center space-x-4">
             <TigangButton language={language} />
+          </div>
+        </div>
+      </section>
+
+      {/* Exercise Guide Section */}
+      <section className="container mx-auto px-4 py-12 max-w-2xl">
+        <div className="text-center mb-8">
+          <h2 className="text-2xl font-bold mb-3 bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent">
+            {language === 'zh' ? '科学运动指导' : 'Scientific Exercise Guide'}
+          </h2>
+        </div>
+        
+        {/* 基础动作 */}
+        <div className="text-left bg-blue-50 border-2 border-blue-200 rounded-lg p-4 shadow-sm mb-6">
+          <h4 className="text-sm font-semibold text-blue-800 mb-3 flex items-center space-x-2">
+            <div className="w-2 h-2 bg-blue-600 rounded-full"></div>
+            <span>{language === 'zh' ? '基础动作要领' : 'Basic Movement Techniques'}</span>
+          </h4>
+          <div className="text-sm text-gray-700 space-y-3">
+            <div className="bg-white bg-opacity-70 rounded-md p-3 border-l-4 border-red-400">
+              <span className="text-red-600 font-semibold">
+                {language === 'zh' ? '收缩期：' : 'Contraction Phase: '}
+              </span>
+              <span className="text-gray-800">
+                {language === 'zh' ? '缓慢收紧肛门肌肉，如同憋住气体，向上提升' : 'Slowly tighten anal muscles as if holding gas, lift upward'}
+              </span>
+            </div>
+            <div className="bg-white bg-opacity-70 rounded-md p-3 border-l-4 border-green-400">
+              <span className="text-green-600 font-semibold">
+                {language === 'zh' ? '放松期：' : 'Relaxation Phase: '}
+              </span>
+              <span className="text-gray-800">
+                {language === 'zh' ? '缓慢完全放松肌肉，保持自然呼吸' : 'Slowly completely relax muscles, maintain natural breathing'}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* 训练姿势 */}
+        <div className="text-left bg-green-50 border-2 border-green-200 rounded-lg p-4 shadow-sm mb-6">
+          <h4 className="text-sm font-semibold text-green-800 mb-3 flex items-center space-x-2">
+            <div className="w-2 h-2 bg-green-600 rounded-full"></div>
+            <span>{language === 'zh' ? '训练姿势选择' : 'Training Posture Options'}</span>
+          </h4>
+          <div className="text-sm text-gray-700 space-y-3">
+            <div className="bg-white bg-opacity-70 rounded-md p-3">
+              <div className="flex items-center space-x-3">
+                <span className="text-xs bg-green-500 text-white px-3 py-1 rounded-full font-medium min-w-fit">
+                  {language === 'zh' ? '新手' : 'Beginner'}
+                </span>
+                <div className="flex-1">
+                  <div className="font-semibold text-gray-800 mb-1">
+                    {language === 'zh' ? '坐姿/仰卧' : 'Sitting/Lying'}
+                  </div>
+                  <div className="text-gray-600 text-xs">
+                    {language === 'zh' ? 
+                      '减少其他肌肉代偿，专注于肛门肌肉控制' : 
+                      'Reduce compensatory muscle activation, focus on anal muscle control'}
+                  </div>
+                </div>
+              </div>
+            </div>
+              
+            <div className="bg-white bg-opacity-70 rounded-md p-3">
+              <div className="flex items-center space-x-3">
+                <span className="text-xs bg-blue-500 text-white px-3 py-1 rounded-full font-medium min-w-fit">
+                  {language === 'zh' ? '入门' : 'Inter.'}
+                </span>
+                <div className="flex-1">
+                  <div className="font-semibold text-gray-800 mb-1">
+                    {language === 'zh' ? '站立/行走' : 'Standing/Walking'}
+                  </div>
+                  <div className="text-gray-600 text-xs">
+                    {language === 'zh' ? 
+                      '增加核心稳定性，模拟日常生活场景' : 
+                      'Increase core stability, simulate daily life scenarios'}
+                  </div>
+                </div>
+              </div>
+            </div>
+              
+            <div className="bg-white bg-opacity-70 rounded-md p-3">
+              <div className="flex items-center space-x-3">
+                <span className="text-xs bg-purple-500 text-white px-3 py-1 rounded-full font-medium min-w-fit">
+                  {language === 'zh' ? '精通' : 'Adv.'}
+                </span>
+                <div className="flex-1">
+                  <div className="font-semibold text-gray-800 mb-1">
+                    {language === 'zh' ? '胸膝卧位/分腿提肛' : 'Knee-chest/Leg-spread'}
+                  </div>
+                  <div className="text-gray-600 text-xs">
+                    {language === 'zh' ? 
+                      '增加训练难度，深层肌肉参与' : 
+                      'Increase training difficulty, engage deep muscle layers'}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* 医学建议 */}
+        <div className="text-left bg-amber-50 rounded-lg p-4 mb-6">
+          <h4 className="text-sm font-semibold text-amber-800 mb-2 flex items-center space-x-1">
+            <Info className="w-4 h-4" />
+            <span>{language === 'zh' ? '医学建议' : 'Medical Advice'}</span>
+          </h4>
+          <p className="text-sm text-gray-600">
+            {language === 'zh' ? 
+              '主要适应肌肉收缩，避免过度疲劳导致盆底肌代偿性紧张。短时间、低强度训练帮助建立神经肌肉控制。' :
+              'Focus on muscle contraction adaptation, avoid excessive fatigue causing compensatory pelvic floor muscle tension. Short-term, low-intensity training helps establish neuromuscular control.'}
+          </p>
+          
+          {/* 进阶时机 */}
+          <div className="mt-3 pt-2 border-t border-amber-200">
+            <div className="text-xs text-amber-700">
+              <strong>{language === 'zh' ? '进阶时机：' : 'Progression Timing: '}</strong>
+              {language === 'zh' ? 
+                '能够稳定完成3秒收缩+5秒放松，且无疲劳感，持续2-4周后可进入下一级。' :
+                'Able to stably complete 3s contraction + 5s relaxation without fatigue for 2-4 weeks before advancing.'}
+            </div>
+          </div>
+        </div>
+
+        {/* 注意事项 */}
+        <div className="text-left bg-red-50 rounded-lg p-4 mb-6">
+          <h4 className="text-sm font-semibold text-red-800 mb-2">
+            {language === 'zh' ? '注意事项' : 'Important Notes'}
+          </h4>
+          <div className="text-sm text-gray-600 space-y-1">
+            <p>• {language === 'zh' ? '训练中无疼痛、尿潴留或肌肉痉挛' : 'No pain, urinary retention, or muscle spasms during training'}</p>
+            <p>• {language === 'zh' ? '如出现不适，应退回上一阶段或减少训练量' : 'If discomfort occurs, return to previous stage or reduce training volume'}</p>
+            <p>• {language === 'zh' ? '严重肛肠疾病患者需咨询医生' : 'Patients with severe anorectal diseases should consult a doctor'}</p>
           </div>
         </div>
       </section>
