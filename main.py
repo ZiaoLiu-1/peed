@@ -169,6 +169,7 @@ def init_sample_users():
 
 def get_database_config():
     """Get database configuration, fallback to SQLite if PostgreSQL not available"""
+    # Default to SQLite for more reliable deployment
     use_postgres = os.getenv('USE_POSTGRES', 'false').lower() == 'true'
     
     if use_postgres:
