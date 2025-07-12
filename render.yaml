@@ -1,0 +1,24 @@
+services:
+  # Web Service for the Flask backend and React frontend
+  - type: web
+    name: peed-app
+    env: python
+    buildCommand: ./build.sh
+    startCommand: python main.py
+    envVars:
+      - key: FLASK_ENV
+        value: production
+      - key: USE_POSTGRES
+        value: true
+      - key: SECRET_KEY
+        generateValue: true
+      - key: CORS_ORIGINS
+        value: https://peed-app.onrender.com
+    healthCheckPath: /health
+    
+  # PostgreSQL Database
+  - type: pserv
+    name: peed-db
+    env: postgresql
+    plan: free
+    ipAllowList: [] 
