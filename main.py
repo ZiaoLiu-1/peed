@@ -179,7 +179,15 @@ def get_database_config():
         db_user = os.getenv('DB_USER', 'postgres')
         db_password = os.getenv('DB_PASSWORD', 'postgres')
         
-        database_uri = f"postgresql://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"
+        # Handle Render's DATABASE_URL format
+        database_url = os.getenv('DATABASE_URL')
+        if database_url:
+            # Render provides DATABASE_URL, use it directly
+            database_uri = database_url
+        else:
+            # Manual configuration
+            database_uri = f"postgresql://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"
+        
         engine_options = {
             'pool_pre_ping': True,
             'pool_recycle': 300,
@@ -209,18 +217,39 @@ def create_app():
     # Configuration
     app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'peed_secret_key_2024_postgresql')
     
-    # Database Configuration
-    database_uri, engine_options, db_type = get_database_config()
-    
-    app.config['SQLALCHEMY_DATABASE_URI'] = database_uri
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    app.config['SQLALCHEMY_ENGINE_OPTIONS'] = engine_options
-    
-    # Store database type for health check
-    app.config['DB_TYPE'] = db_type
-    
-    # Initialize database
-    db.init_app(app)
+    # Database Configuration with fallback
+    try:
+        database_uri, engine_options, db_type = get_database_config()
+        app.config['SQLALCHEMY_DATABASE_URI'] = database_uri
+        app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+        app.config['SQLALCHEMY_ENGINE_OPTIONS'] = engine_options
+        app.config['DB_TYPE'] = db_type
+        
+        # Initialize database
+        db.init_app(app)
+        
+        # Test database connection
+        with app.app_context():
+            db.engine.connect()
+            print(f"✅ Database connection successful: {db_type}")
+            
+    except Exception as e:
+        print(f"❌ PostgreSQL connection failed: {e}")
+        print("🔄 Falling back to SQLite...")
+        
+        # Fallback to SQLite
+        database_dir = os.path.join(os.path.dirname(__file__), 'database')
+        if not os.path.exists(database_dir):
+            os.makedirs(database_dir)
+        
+        app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{os.path.join(database_dir, 'peed.db')}"
+        app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+        app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {'pool_pre_ping': True, 'pool_recycle': 300}
+        app.config['DB_TYPE'] = 'SQLite (fallback)'
+        
+        # Re-initialize with SQLite
+        db.init_app(app)
+        print("✅ SQLite fallback initialized successfully")
     
     # CORS Configuration
     cors_origins = os.getenv('CORS_ORIGINS', 'http://localhost:3000,http://localhost:3001,http://localhost:3002').split(',')

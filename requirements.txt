@@ -1,6 +1,7 @@
 flask==3.1.1
 flask-cors==6.0.1
 flask-sqlalchemy==3.1.1
-psycopg2-binary==2.9.9
+psycopg2-binary==2.9.9; python_version < '3.13'
+psycopg[binary]==3.1.18; python_version >= '3.13'
 python-dotenv==1.0.0
 
