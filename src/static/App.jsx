@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import { Globe, Sparkles, Heart, Award, Users, Target, TrendingUp, Shield, Wallet, User, LogOut, Settings, Info } from 'lucide-react'
+import { Globe, Sparkles, Heart, Award, Users, Target, TrendingUp, Shield, Wallet, User, LogOut, Settings, Info, Map } from 'lucide-react'
 import TigangButton from './TigangButton'
 import ProfilePage from './ProfilePageWallet'
+import RoadmapPage from './RoadmapPage'
 import apiClient from './api.js'
 
 // Simple UI components
@@ -121,7 +122,7 @@ const LoginModal = ({ isOpen, onClose, language, onLogin }) => {
 
 function App() {
   const [language, setLanguage] = useState('zh')
-  const [currentPage, setCurrentPage] = useState('home') // 'home', 'profile'
+  const [currentPage, setCurrentPage] = useState('home') // 'home', 'profile', 'roadmap'
   
   // 钱包相关状态
   const [walletAddress, setWalletAddress] = useState(null);
@@ -412,6 +413,16 @@ function App() {
     }
   };
 
+  // Render roadmap page
+  if (currentPage === 'roadmap') {
+    return (
+      <RoadmapPage
+        language={language}
+        onBack={() => setCurrentPage('home')}
+      />
+    );
+  }
+
   // Render profile page - 现在需要钱包连接
   if (currentPage === 'profile' && walletAddress) {
     console.log('Rendering ProfilePage with wallet:', walletAddress, walletType)
@@ -447,6 +458,16 @@ function App() {
 
             {/* Navigation & Controls */}
             <div className="flex items-center space-x-4">
+              {/* Roadmap Button */}
+              <Button
+                variant="outline"
+                onClick={() => handlePageChange('roadmap')}
+                className="flex items-center space-x-2 hover:bg-blue-50 border-blue-200"
+              >
+                <Map className="w-4 h-4" />
+                <span>{language === 'zh' ? '发展路线' : 'Roadmap'}</span>
+              </Button>
+
               {/* 仅保留钱包连接状态的导航 */}
               {walletAddress && (
                 <Button
