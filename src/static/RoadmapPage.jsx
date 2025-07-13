@@ -1,5 +1,5 @@
 import React from 'react'
-import { Twitter, Trophy, Users, MessageCircle, Zap, Shield, TrendingUp, Gift, ArrowLeft, Calendar, Target } from 'lucide-react'
+import { Twitter, Trophy, Users, MessageCircle, Zap, Shield, TrendingUp, Gift, Calendar, Target } from 'lucide-react'
 
 // Simple UI components
 const Button = ({ children, variant = 'default', onClick, className = '', ...props }) => {
@@ -82,22 +82,11 @@ const RoadmapCard = ({ icon: Icon, title, description, status, timeline, priorit
       </div>
       
       <p className="text-gray-600 mb-4 leading-relaxed">{description}</p>
-      
-      <div className="flex items-center justify-between text-sm text-gray-500">
-        <div className="flex items-center space-x-1">
-          <Calendar className="w-4 h-4" />
-          <span>{timeline}</span>
-        </div>
-        <div className="flex items-center space-x-1">
-          <Target className="w-4 h-4" />
-          <span>{language === 'zh' ? '目标功能' : 'Target Feature'}</span>
-        </div>
-      </div>
     </Card>
   )
 }
 
-const RoadmapPage = ({ language = 'zh', onBack }) => {
+const RoadmapPage = ({ language = 'zh' }) => {
   const roadmapItems = [
     {
       icon: Twitter,
@@ -105,8 +94,18 @@ const RoadmapPage = ({ language = 'zh', onBack }) => {
       description: language === 'zh' 
         ? '连接推特账号，分享训练成果，与更多健康爱好者互动交流，扩大PEED社区影响力'
         : 'Connect Twitter accounts, share training achievements, interact with health enthusiasts, and expand PEED community influence',
-      status: 'planning',
+      status: 'development',
       timeline: language === 'zh' ? '2024 Q1' : '2024 Q1',
+      priority: 'high'
+    },
+    {
+      icon: Zap,
+      title: language === 'zh' ? '个性化训练' : 'Smart Reminders',
+      description: language === 'zh'
+        ? '基于AI生成的个人训练计划，根据用户习惯和身体状况智能调整训练强度'
+        : 'AI-based personalized training plan, intelligently adjust training intensity based on user habits and physical condition',
+      status: 'development',
+      timeline: language === 'zh' ? '2024 Q3' : '2024 Q3',
       priority: 'high'
     },
     {
@@ -115,10 +114,11 @@ const RoadmapPage = ({ language = 'zh', onBack }) => {
       description: language === 'zh'
         ? '实时排行榜，展示训练达人，激发竞争精神。包括日榜、周榜、月榜等多维度排名'
         : 'Real-time leaderboards showcasing training experts to inspire competitive spirit. Including daily, weekly, and monthly rankings',
-      status: 'development',
+      status: 'planning',
       timeline: language === 'zh' ? '2024 Q1' : '2024 Q1',
       priority: 'high'
     },
+    
     {
       icon: Users,
       title: language === 'zh' ? '好友系统' : 'Friend System',
@@ -137,16 +137,6 @@ const RoadmapPage = ({ language = 'zh', onBack }) => {
         : 'Health topic discussion area, expert Q&A, user experience sharing. Build a professional health community platform',
       status: 'planning',
       timeline: language === 'zh' ? '2024 Q2' : '2024 Q2',
-      priority: 'medium'
-    },
-    {
-      icon: Zap,
-      title: language === 'zh' ? '智能提醒' : 'Smart Reminders',
-      description: language === 'zh'
-        ? '基于AI的个性化训练提醒，根据用户习惯和身体状况智能调整提醒频率'
-        : 'AI-based personalized training reminders that intelligently adjust reminder frequency based on user habits and physical condition',
-      status: 'planning',
-      timeline: language === 'zh' ? '2024 Q3' : '2024 Q3',
       priority: 'medium'
     },
     {
@@ -182,31 +172,7 @@ const RoadmapPage = ({ language = 'zh', onBack }) => {
   ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 via-blue-50 to-purple-50">
-      {/* Header */}
-      <header className="bg-white shadow-sm border-b border-gray-200">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <Button
-                variant="outline"
-                onClick={onBack}
-                className="flex items-center space-x-2"
-              >
-                <ArrowLeft className="w-4 h-4" />
-                <span>{language === 'zh' ? '返回首页' : 'Back to Home'}</span>
-              </Button>
-              <h1 className="text-2xl font-bold">
-                <span className="text-green-600">PEED</span>
-                <span className="text-gray-700"> - {language === 'zh' ? '发展路线图' : 'Development Roadmap'}</span>
-              </h1>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      {/* Main Content */}
-      <main className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-8">
         {/* Hero Section */}
         <section className="text-center mb-12">
           <div className="max-w-4xl mx-auto">
@@ -267,20 +233,22 @@ const RoadmapPage = ({ language = 'zh', onBack }) => {
                 : 'If you have any feature suggestions or ideas, feel free to give us feedback through the community. Your input will directly influence PEED\'s development direction!'
               }
             </p>
-            <Button
-              onClick={onBack}
-              className="bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700"
-            >
-              {language === 'zh' ? '开始使用 PEED' : 'Start Using PEED'}
-            </Button>
+            
+            <div className="flex justify-center mb-6">
+              <Button 
+                onClick={() => window.open('https://x.com/PeedTigang', '_blank')}
+                className="flex items-center space-x-2 bg-black hover:bg-gray-800 text-white"
+              >
+                <Twitter className="w-5 h-5" />
+                <span>{language === 'zh' ? '关注我们的推特' : 'Follow Our Twitter'}</span>
+              </Button>
+            </div>
+            
+            <p className="text-sm text-gray-500 mt-4">
+              {language === 'zh' ? '期待与你一起打造更好的PEED！' : 'Looking forward to building a better PEED with you!'}
+            </p>
           </div>
         </section>
-      </main>
-
-      {/* Footer */}
-      <footer className="container mx-auto px-4 py-8 text-center text-gray-600">
-        <p>© 2024 PEED - {language === 'zh' ? '与你一起成长的健康伙伴' : 'Your Growing Health Companion'} 🐢</p>
-      </footer>
     </div>
   )
 }

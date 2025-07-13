@@ -413,13 +413,171 @@ function App() {
     }
   };
 
-  // Render roadmap page
+  // Render roadmap page with topbar
   if (currentPage === 'roadmap') {
     return (
-      <RoadmapPage
-        language={language}
-        onBack={() => setCurrentPage('home')}
-      />
+      <div className="min-h-screen bg-gradient-to-br from-green-50 via-blue-50 to-purple-50">
+        {/* 顶部导航栏 */}
+        <header className="bg-white/90 backdrop-blur-md shadow-sm border-b border-white/20 sticky top-0 z-40">
+          <div className="container mx-auto px-4 py-4">
+            <div className="flex items-center justify-between">
+              {/* Logo */}
+              <div className="flex items-center space-x-3">
+                <div className="relative">
+                  <img src={peedLogo} alt="PEED" className="w-8 h-8 rounded-full animate-pulse" />
+                  <Sparkles className="absolute -top-1 -right-1 w-3 h-3 text-yellow-400 animate-spin" />
+                </div>
+                <div>
+                  <h1 className="text-xl font-bold text-green-700">PEED</h1>
+                  <p className="text-xs text-gray-500">
+                    {language === 'zh' ? '发展路线图' : 'Development Roadmap'}
+                  </p>
+                </div>
+              </div>
+
+              {/* Navigation & Controls */}
+              <div className="flex items-center space-x-4">
+                {/* Back to Home Button */}
+                <Button
+                  variant="outline"
+                  onClick={() => setCurrentPage('home')}
+                  className="flex items-center space-x-2 hover:bg-green-50 border-green-200"
+                >
+                  <span>{language === 'zh' ? '返回首页' : 'Back to Home'}</span>
+                </Button>
+
+                {/* Profile Button (if wallet connected) */}
+                {walletAddress && (
+                  <Button
+                    variant="outline"
+                    onClick={() => {
+                      console.log('Profile button clicked, wallet:', walletAddress)
+                      handlePageChange('profile')
+                    }}
+                    className="flex items-center space-x-2"
+                  >
+                    <User className="w-4 h-4" />
+                    <span>{language === 'zh' ? '查看资料' : 'View Profile'}</span>
+                  </Button>
+                )}
+
+                {/* Language Toggle */}
+                <Button
+                  variant="outline"
+                  onClick={() => setLanguage(language === 'zh' ? 'en' : 'zh')}
+                  className="flex items-center space-x-2"
+                >
+                  <Globe className="w-4 h-4" />
+                  <span>{language === 'zh' ? 'EN' : '中文'}</span>
+                </Button>
+
+                {/* Wallet Connection */}
+                {walletAddress ? (
+                  <div className="flex items-center space-x-3">
+                    <Badge className="bg-green-100 text-green-800 flex items-center space-x-2">
+                      <Wallet className="w-4 h-4" />
+                      <span>{formatAddress(walletAddress)}</span>
+                    </Badge>
+                    <Button
+                      variant="outline"
+                      onClick={disconnectWallet}
+                      className="text-red-600 hover:text-red-700"
+                    >
+                      {language === 'zh' ? '断开' : 'Disconnect'}
+                    </Button>
+                  </div>
+                ) : (
+                  <Button
+                    onClick={() => {
+                      console.log('Connect wallet button clicked')
+                      showWalletSelector()
+                    }}
+                    disabled={isWalletConnecting}
+                    className="flex items-center space-x-2"
+                  >
+                    <Wallet className="w-4 h-4" />
+                    <span>
+                      {isWalletConnecting
+                        ? (language === 'zh' ? '连接中...' : 'Connecting...')
+                        : (language === 'zh' ? '连接钱包' : 'Connect Wallet')
+                      }
+                    </span>
+                  </Button>
+                )}
+              </div>
+            </div>
+          </div>
+        </header>
+
+        {/* Main Content */}
+        <main>
+          <RoadmapPage language={language} />
+        </main>
+
+        {/* Wallet Selection Modal */}
+        {showWalletOptions && (
+          <div className="wallet-selector fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white rounded-2xl p-6 max-w-md w-full mx-4 max-h-[80vh] overflow-y-auto">
+              <h3 className="text-xl font-bold mb-4 text-center">
+                {language === 'zh' ? '选择钱包' : 'Select Wallet'}
+              </h3>
+              
+              <div className="space-y-3">
+                {getAllSupportedWallets().map((wallet) => (
+                  <div key={wallet.type} className="border border-gray-200 rounded-lg p-4">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-3">
+                        <span className="text-2xl">{wallet.icon}</span>
+                        <div>
+                          <h4 className="font-medium">{wallet.name}</h4>
+                          <p className="text-sm text-gray-500">{wallet.description}</p>
+                        </div>
+                      </div>
+                      
+                      {wallet.isInstalled ? (
+                        <Button
+                          onClick={() => connectWallet(wallet.type)}
+                          disabled={isWalletConnecting}
+                          className="ml-4"
+                        >
+                          {language === 'zh' ? '连接' : 'Connect'}
+                        </Button>
+                      ) : (
+                        <Button
+                          variant="outline"
+                          onClick={() => window.open(wallet.downloadUrl, '_blank')}
+                          className="ml-4"
+                        >
+                          {language === 'zh' ? '安装' : 'Install'}
+                        </Button>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {walletError && (
+                <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+                  <p className="text-red-600 text-sm">{walletError}</p>
+                </div>
+              )}
+
+              <Button
+                variant="outline"
+                onClick={() => setShowWalletOptions(false)}
+                className="w-full mt-6"
+              >
+                {language === 'zh' ? '关闭' : 'Close'}
+              </Button>
+            </div>
+          </div>
+        )}
+
+        {/* Footer */}
+        <footer className="container mx-auto px-4 py-8 text-center text-gray-600">
+          <p>© 2024 PEED - {language === 'zh' ? '让健康变得有趣' : 'Making Health Fun'} 🐢</p>
+        </footer>
+      </div>
     );
   }
 
@@ -782,7 +940,7 @@ function App() {
               </Card>
             </div>
             
-            {/* 第三行：数据追踪 + 隐私保护 */}
+            {/* 第三行：数据追踪 + 好友互动 */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Card className="text-center hover:shadow-lg transition-all duration-300 hover:scale-105 p-4">
                 <div className="bg-red-100 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3">
@@ -797,14 +955,14 @@ function App() {
               </Card>
               
               <Card className="text-center hover:shadow-lg transition-all duration-300 hover:scale-105 p-4">
-                <div className="bg-indigo-100 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3">
-                  <Shield className="w-6 h-6 text-indigo-600" />
+                <div className="bg-purple-100 w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-3">
+                  <Users className="w-6 h-6 text-purple-600" />
                 </div>
-                <h3 className="text-lg font-bold mb-2 text-indigo-700">
-                  {language === 'zh' ? '隐私保护' : 'Privacy Protection'}
+                <h3 className="text-lg font-bold mb-2 text-purple-700">
+                  {language === 'zh' ? '好友互动' : 'Friend Interaction'}
                 </h3>
                 <p className="text-sm text-gray-600 leading-relaxed">
-                  {language === 'zh' ? '完全匿名使用，保护个人隐私' : 'Completely anonymous use, protecting personal privacy'}
+                  {language === 'zh' ? '添加好友，一起训练，互相鼓励进步' : 'Add friends, train together, and encourage each other to improve'}
                 </p>
               </Card>
             </div>

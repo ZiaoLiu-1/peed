@@ -848,28 +848,30 @@ const TigangButton = ({ language = 'zh', walletAddress, walletType, onWalletRequ
 
         
 
-         {/* 控制按钮 */}
-         <div className="flex items-center space-x-4">
-           <Button
-             variant="outline"
-             onClick={isExercising ? pauseExercise : startExercise}
-             className="flex-1 flex items-center justify-center space-x-2"
-             disabled={loading}
-           >
-             {isExercising ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
-             <span>{isExercising ? (language === 'zh' ? '暂停' : 'Pause') : (language === 'zh' ? '开始' : 'Start')}</span>
-           </Button>
-           
-           <Button
-             variant="secondary"
-             onClick={resetExercise}
-             className="flex items-center space-x-2"
-             disabled={loading}
-           >
-             <RotateCcw className="w-4 h-4" />
-             <span>{language === 'zh' ? '重置' : 'Reset'}</span>
-           </Button>
-         </div>
+         {/* 控制按钮 - 只在开始训练后显示 */}
+         {currentPhase !== 'ready' && (
+           <div className="flex items-center space-x-4">
+             <Button
+               variant="outline"
+               onClick={isExercising ? pauseExercise : startExercise}
+               className="flex-1 flex items-center justify-center space-x-2"
+               disabled={loading}
+             >
+               {isExercising ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
+               <span>{isExercising ? (language === 'zh' ? '暂停' : 'Pause') : (language === 'zh' ? '开始' : 'Start')}</span>
+             </Button>
+             
+             <Button
+               variant="secondary"
+               onClick={resetExercise}
+               className="flex items-center space-x-2"
+               disabled={loading}
+             >
+               <RotateCcw className="w-4 h-4" />
+               <span>{language === 'zh' ? '重置' : 'Reset'}</span>
+             </Button>
+           </div>
+         )}
        </div>
 
       {/* 进阶提醒弹窗 */}
