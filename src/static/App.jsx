@@ -880,6 +880,40 @@ function App() {
 
       {/* 主要内容 */}
       <main className="container mx-auto px-4 py-8">
+        {/* Project Status Notice */}
+        <div className="mb-8">
+          <div className="bg-gradient-to-r from-orange-100 to-red-100 border-l-4 border-orange-500 rounded-lg p-4 shadow-md">
+            <div className="flex items-center space-x-3">
+              <div className="flex-shrink-0">
+                <div className="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center">
+                  <span className="text-white font-bold text-sm">!</span>
+                </div>
+              </div>
+              <div className="flex-1">
+                <h3 className="text-lg font-semibold text-orange-800 mb-1">
+                  {language === 'zh' ? '📢 项目状态提醒' : '📢 Project Status Notice'}
+                </h3>
+                <p className="text-orange-700 text-sm leading-relaxed">
+                  {language === 'zh' 
+                    ? '项目目前还在开发完善中，暂未正式上线！请关注我们的推特获取最新进展和上线通知～' 
+                    : 'The project is still under development and not officially launched yet! Please follow our Twitter for the latest updates and launch notifications～'}
+                </p>
+              </div>
+              <div className="flex-shrink-0">
+                <a 
+                  href="https://x.com/PeedTigang" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center px-3 py-1 bg-orange-500 text-white text-sm font-medium rounded-md hover:bg-orange-600 transition-colors duration-200"
+                >
+                  <span className="mr-1">🐦</span>
+                  {language === 'zh' ? '关注推特' : 'Follow Twitter'}
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Hero Section */}
         <section className="text-center mb-16">
           <div className="max-w-4xl mx-auto">
